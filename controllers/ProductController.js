@@ -84,7 +84,30 @@ export const updateProductsById = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Error in Get Product By API",
+      message: "Error in Update Product By API",
+      error: error.message,
+    });
+  }
+};
+
+
+//Delete Product by ID
+export const deleteProductsById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const product = await ProductModel.findByIdAndDelete(id);
+    if (!product) {
+      return res.status(404).json({
+        message: "Product Not Found",
+      });
+    }
+    res.status(200).json({
+      message: "Product Delete Successfully",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error in Delete Product By API",
       error: error.message,
     });
   }
