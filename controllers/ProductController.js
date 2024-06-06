@@ -24,3 +24,20 @@ export const addProduct = async (req, res) => {
     });
   }
 };
+
+//get Products
+export const getProducts = async (req, res) => {
+  try {
+    const products = await ProductModel.find().sort({ createdAt: -1 });
+    res.status(200).json({
+      message: "Products Fetched Successfully",
+      products,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error in Get Product API",
+      error: error.message,
+    });
+  }
+};
