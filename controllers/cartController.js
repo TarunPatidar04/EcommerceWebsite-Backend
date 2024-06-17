@@ -55,3 +55,95 @@ export const userCart = async (req, res) => {
     });
   }
 };
+
+//Remove Product from cart
+export const RemoveProductFromCart = async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const userId = "66615146f552e41e017f8a3b";
+    let cart = await CartModel.findOne({ userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+    cart.items = cart.items.filter(
+      (item) => item.productId.toString() != productId
+    );
+    await cart.save();
+    res.status(200).json({
+      message: "Product Remove From Cart",
+      cart,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error Remove Product From Cart API",
+      error: error.message,
+    });
+  }
+};
+
+//Remove Clear cart
+export const ClearCart = async (req, res) => {
+  try {
+    const userId = "66615146f552e41e017f8a3b";
+    let cart = await CartModel.findOne({ userId });
+    if (!cart) {
+      cart = new CartModel({ items: [] });
+    } else {
+      cart.items = [];
+    }
+    await cart.save();
+    res.status(200).json({
+      message: "Cart Clear",
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error  Clear Cart API",
+      error: error.message,
+    });
+  }
+};
+
+//Remove a product to the cart (Decrease quanity of cart)
+export const decreaseProductQty = async (req, res) => {
+  try {
+    const { productId, qty } = req.body;
+
+    const userId = "66615146f552e41e017f8a3b";
+    let cart = await CartModel.findOne({ userId });
+    if (!cart) {
+      cart = new CartModel({
+        userId,
+        items: [],
+      });
+    }
+    const itemIndex = cart.items.findIndex(
+      (item) => item.productId.toString() === productId
+    );
+    if (itemIndex > -1) {
+      const item = cart.items[itemIndex];
+
+      if (item.qty > qty) {
+        const pricePerUnit = item.price / item.qty;
+
+        item.qty -= qty;
+        item.price -= pricePerUnit * qty;
+      } else {
+        cart.items.splice(itemIndex, 1);
+      }
+    } else {
+      return res.json({ message: "Invalid Product Id" });
+    }
+
+    await cart.save();
+    res.status(200).json({
+      message: "Item Quantity Decresase to Cart",
+      cart,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Error in decrease Product Qty API",
+      error: error.message,
+    });
+  }
+};
