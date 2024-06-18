@@ -1,5 +1,8 @@
 import UserModel from "../models/UserModel.js";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 // User register
 export const register = async (req, res) => {
@@ -52,10 +55,13 @@ export const login = async (req, res) => {
         success: false,
       });
     }
+    const token = jwt.sign({ userId: user._id },process.env.SECRET_KEY, {
+      expiresIn: "365days",
+    });
     res.status(200).json({
       message: "User logged in successfully",
-      success: true,
-      user,
+      token,
+      success: true,  
     });
   } catch (error) {
     console.log(error);
@@ -64,7 +70,7 @@ export const login = async (req, res) => {
       error: error.message,
     });
   }
-};
+}; 
 
 // get All Users
 export const getAllUsers = async (req, res) => {
