@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import UserRouter from "./routes/UserRoute.js";
 import ProductRouter from "./routes/ProductRoute.js";
 import CartRouter from "./routes/CartRoute.js";
+import AddressRoute from "./routes/AddressRoute.js";
 dotenv.config();
 const app = express();
 
@@ -28,6 +29,9 @@ app.use("/api/product", ProductRouter);
 
 //Cart Router
 app.use("/api/cart", CartRouter);
+
+//Address Router
+app.use("/api/address", AddressRoute);
 
 
 app.get("/", (req, res) => {
