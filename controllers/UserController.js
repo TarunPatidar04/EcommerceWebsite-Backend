@@ -89,3 +89,10 @@ export const getAllUsers = async (req, res) => {
     });
   }
 };
+
+
+
+//get Profile
+export const profile=async (req, res, next) => {
+  res.json({user: req.user})
+}
