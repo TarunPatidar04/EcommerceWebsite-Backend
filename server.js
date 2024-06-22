@@ -1,12 +1,20 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from "cors";
 import UserRouter from "./routes/UserRoute.js";
 import ProductRouter from "./routes/ProductRoute.js";
 import CartRouter from "./routes/CartRoute.js";
 import AddressRoute from "./routes/AddressRoute.js";
 dotenv.config();
 const app = express();
+app.use(
+  cors({
+    origin: true,
+    methods: ["GET", "POST", "DELETE", "PUT"],
+    credentials: true,
+  })
+);
 
 //middleware
 app.use(express.json());
@@ -32,7 +40,6 @@ app.use("/api/cart", CartRouter);
 
 //Address Router
 app.use("/api/address", AddressRoute);
-
 
 app.get("/", (req, res) => {
   res.json({
