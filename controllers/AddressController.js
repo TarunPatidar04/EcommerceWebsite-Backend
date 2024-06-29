@@ -25,6 +25,7 @@ export const addAddress = async (req, res) => {
 
     res.status(200).json({
       message: "Address added successfully",
+      success: true,
       UserAddress,
     });
   } catch (error) {
@@ -39,7 +40,7 @@ export const addAddress = async (req, res) => {
 //Get Address
 export const getAddress = async (req, res) => {
   try {
-    let address = await AddressModel.find({userId:req.user}).sort({
+    let address = await AddressModel.find({ userId: req.user }).sort({
       createAt: -1,
     });
 
