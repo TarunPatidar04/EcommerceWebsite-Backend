@@ -6,6 +6,7 @@ import UserRouter from "./routes/UserRoute.js";
 import ProductRouter from "./routes/ProductRoute.js";
 import CartRouter from "./routes/CartRoute.js";
 import AddressRoute from "./routes/AddressRoute.js";
+import PaymentRoute from "./routes/PaymentRoute.js";
 dotenv.config();
 const app = express();
 app.use(
@@ -40,6 +41,11 @@ app.use("/api/cart", CartRouter);
 
 //Address Router
 app.use("/api/address", AddressRoute);
+
+//Payment Router
+app.use("/api/payment", PaymentRoute);
+
+
 
 app.get("/", (req, res) => {
   res.json({
