@@ -1,8 +1,10 @@
 import PaymentModel from "../models/PaymentModel.js";
 import Razorpay from "razorpay";
+import { dotenv } from "dotenv";
+dotenv.config();
 const razorpay = new Razorpay({
-  key_id: "rzp_test_q1OyBsAbEk77IE",
-  key_secret: "VG4vi3kXkbXdVA4kGAGLxVDY",
+  key_id: process.env.key_id,
+  key_secret: process.env.key_secret,
 });
 
 //Add Address
@@ -17,7 +19,7 @@ export const checkout = async (req, res) => {
 
     // Create a new order using Razorpay's Orders API
     const order = await razorpay.orders.create(options);
-    console.log("Razorpay Order: ", order);
+    // console.log("Razorpay Order: ", order);
     res.json({
       order_id: order.id,
       amount: amount,
@@ -56,7 +58,7 @@ export const verify = async (req, res) => {
       userShipping,
       payStatus: "paid",
     });
-    console.log("Payment Confirmation: ", orderConfirm);
+    // console.log("Payment Confirmation: ", orderConfirm);
 
     res.json({
       message: "Payment Successful",
@@ -71,7 +73,7 @@ export const verify = async (req, res) => {
 //user specific order
 export const UserOrder = async (req, res) => {
   try {
-    const userId = req.user._id.toString()
+    const userId = req.user._id.toString();
     // console.log("userId", userId);
     const Orders = await PaymentModel.find({ userId: userId }).sort({
       orderDate: -1,
@@ -83,8 +85,6 @@ export const UserOrder = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
-
-
 
 //user specific order
 export const allOrders = async (req, res) => {
